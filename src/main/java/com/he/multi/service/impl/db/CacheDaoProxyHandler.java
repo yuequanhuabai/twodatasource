@@ -1,7 +1,6 @@
 package com.he.multi.service.impl.db;
 
 
-import org.apache.poi.ss.formula.functions.T;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +10,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -130,8 +128,8 @@ public class CacheDaoProxyHandler<T> implements InvocationHandler, Serializable 
 
         return invokeResult;
     }
-
-    private void runInvokeByBeanName(final Map<String, Object>, Method method, Object[] args, String beanName) throws Throwable {
+//    final Map<String, Object> contextMap,
+    private void runInvokeByBeanName( Method method, Object[] args, String beanName) throws Throwable {
 
         Future<?> submit = executorService.submit(
                 () -> {
