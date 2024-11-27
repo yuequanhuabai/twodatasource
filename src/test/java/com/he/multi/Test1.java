@@ -8,11 +8,12 @@ import org.springframework.util.StringUtils;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Test1 {
-    private  static Logger logger = LoggerFactory.getLogger(Test1.class);
+    private static Logger logger = LoggerFactory.getLogger(Test1.class);
 
     @Test
     public void test1() throws ParseException {
@@ -42,10 +43,10 @@ public class Test1 {
         // 青山之云
         // 我不再是我，好像被自己迂回了。 你不再是风，风
 
-        List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
-        if(CollectionUtils.isEmpty(list)){
+        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        if (CollectionUtils.isEmpty(list)) {
             System.out.println("true");
-        }else {
+        } else {
             System.out.println("false");
         }
 
@@ -53,16 +54,31 @@ public class Test1 {
 //        List<Map<String,Object>> list
 
 
-
     }
 
     @Test
     public void test2() throws ParseException {
 
-        String  basePackage="datasource.proxy.basePackage";
+        String basePackage = "datasource.proxy.basePackage";
 
         String[] strings = StringUtils.tokenizeToStringArray(basePackage, ",; \t\n");
 
         System.out.println(strings);
+    }
+
+
+    @Test
+    public void test3() throws ParseException {
+
+        List<Map<String, Object>> list1 = new ArrayList<>();
+
+        List<Map<String, Object>> list2 = new ArrayList<>();
+        Map<String, Object> map = new HashMap<>();
+        map.put("majorNo", "13");
+        map.put("minorNo", "12");
+        map.put("UniqueCode", "Code123");
+        list2.add(map);
+
+
     }
 }

@@ -15,6 +15,7 @@ public class CacheDaoThreadPool implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
+        
         ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().setNameFormat("CacheDaoThreadPool-%d").build();
         executor= new ThreadPoolExecutor(50,200,0, TimeUnit.MILLISECONDS,new LinkedBlockingQueue<>(512),
                 namedThreadFactory,new ThreadPoolExecutor.AbortPolicy());
