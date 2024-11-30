@@ -1,11 +1,12 @@
 package com.he.multi.service.impl.db;
 
-import org.apache.poi.ss.formula.functions.T;
+
+
 import org.springframework.beans.factory.FactoryBean;
 
 import java.lang.reflect.Proxy;
 
-public class CacheDaoProxyFactory implements FactoryBean {
+public class CacheDaoProxyFactory<T> implements FactoryBean<T> {
 
     private Class<T> daoInterface;
 
@@ -14,13 +15,13 @@ public class CacheDaoProxyFactory implements FactoryBean {
     }
 
     @Override
-    public Object getObject() throws Exception {
+    public T getObject() throws Exception {
         CacheDaoProxyHandler<Object> tCacheDaoProxyHandler = new CacheDaoProxyHandler<>();
-        return Proxy.newProxyInstance(this.daoInterface.getClassLoader(),new Class[]{daoInterface}, tCacheDaoProxyHandler);
+        return (T)Proxy.newProxyInstance(this.daoInterface.getClassLoader(),new Class[]{daoInterface}, tCacheDaoProxyHandler);
     }
 
     @Override
-    public Class<?> getObjectType() {
+    public Class<T> getObjectType() {
         return this.daoInterface;
     }
 
