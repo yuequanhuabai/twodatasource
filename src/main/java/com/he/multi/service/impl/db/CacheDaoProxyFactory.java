@@ -21,7 +21,7 @@ public class CacheDaoProxyFactory implements FactoryBean {
 
     @Override
     public Class<?> getObjectType() {
-        return null;
+        return this.daoInterface;
     }
 
     @Override
