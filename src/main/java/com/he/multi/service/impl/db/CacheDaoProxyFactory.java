@@ -27,6 +27,6 @@ public class CacheDaoProxyFactory<T> implements FactoryBean<T> {
 
     @Override
     public boolean isSingleton() {
-        return FactoryBean.super.isSingleton();
+        return true;
     }
 }
