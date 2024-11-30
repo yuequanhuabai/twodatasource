@@ -16,7 +16,7 @@ public class CacheDaoProxyFactory<T> implements FactoryBean<T> {
 
     @Override
     public T getObject() throws Exception {
-        CacheDaoProxyHandler<Object> tCacheDaoProxyHandler = new CacheDaoProxyHandler<>();
+        CacheDaoProxyHandler<T> tCacheDaoProxyHandler = new CacheDaoProxyHandler<>();
         return (T)Proxy.newProxyInstance(this.daoInterface.getClassLoader(),new Class[]{daoInterface}, tCacheDaoProxyHandler);
     }
 
