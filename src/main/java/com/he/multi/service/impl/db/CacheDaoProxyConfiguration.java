@@ -5,12 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.PropertyValue;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.beans.factory.config.TypedStringValue;
+import org.springframework.beans.factory.config.*;
 import org.springframework.beans.factory.support.*;
-import org.springframework.boot.autoconfigure.context.PropertyPlaceholderAutoConfiguration;
-
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ResourceLoaderAware;
@@ -93,9 +89,9 @@ public class CacheDaoProxyConfiguration implements BeanDefinitionRegistryPostPro
 
     }
 
-    private void register(BeanDefinitionRegistry registry, String packageLocaation, boolean isDb) {
-        if(null !=packageLocaation){
-            String[] basePackages = StringUtils.tokenizeToStringArray(packageLocaation, ",; \t\n");
+    private void register(BeanDefinitionRegistry registry, String packageLocation, boolean isDb) {
+        if(null !=packageLocation){
+            String[] basePackages = StringUtils.tokenizeToStringArray(packageLocation, ",; \t\n");
             String[] var5 =basePackages;
             int var6 = basePackages.length;
 
@@ -139,121 +135,58 @@ public class CacheDaoProxyConfiguration implements BeanDefinitionRegistryPostPro
         if (null != beanDefinitionNames && beanDefinitionNames.length > 0) {
             // 属性文件的bean一般都不会配名字和id
             PathMatchingResourcePatternResolver pathMatchingResourcePatternResolver = new PathMatchingResourcePatternResolver();
-            String[] var8 = beanDefinitionNames;
-            int var9 = beanDefinitionNames.length;
 
-            for (int var10 = 0; var10 < var9; ++var10) {
-                String beanName = var8[var10];
-                BeanDefinition beanDefinition = defaultListableBeanFactory.getBeanDefinition(beanName);
+            for (String beanDefinitionName : beanDefinitionNames) {
+                BeanDefinition beanDefinition = defaultListableBeanFactory.getBeanDefinition(beanDefinitionName);
                 String beanClassName = beanDefinition.getBeanClassName();
-                if (beanClassName != null && !"".equals(beanClassName)) {
-                    try {
-                        Class<?> beanClass = Class.forName(beanClassName, true, this.applicationContext.getClassLoader());
-                        if (PropertyPlaceholderAutoConfiguration.class.isAssignableFrom(beanClass)) {
-                            MutablePropertyValues propertyValues = beanDefinition.getPropertyValues();
-                            PropertyValue locations = propertyValues.getPropertyValue("locations");
-                            ArrayList<TypedStringValue> valueList = (ArrayList) locations.getValue();
-                            StringBuilder sb = new StringBuilder();
-                            Iterator<TypedStringValue> var19 = valueList.iterator();
+                if (beanClassName == null) {
+                    continue;
+                }
+                try {
+                    Class<?> beanClass = Class.forName(beanClassName, true, this.applicationContext.getClassLoader());
+                    if (PropertyPlaceholderConfigurer.class.isAssignableFrom(beanClass)) {
+                        MutablePropertyValues propertyValues = beanDefinition.getPropertyValues();
+                        PropertyValue locations = propertyValues.getPropertyValue("locations");
+                        ArrayList<TypedStringValue> valueList = (ArrayList) locations.getValue();
+                        StringBuilder sb = new StringBuilder();
+                        for (TypedStringValue classPath : valueList) {
+                            String value = classPath.getValue();
+                            String newValue = helper.replacePlaceholders(value, systemProperties);
+                            Resource[] resources = pathMatchingResourcePatternResolver.getResources(newValue);
 
-                            while (true) {
-                                Resource[] resources;
-                                do {
-                                    if (!var19.hasNext()) {
-                                        if (sb.length() > 0) {
-                                            sb.deleteCharAt(sb.length() - 1);
-                                        }
-                                        String finalValue = sb.toString();
-                                        logger.info("get finalValue properties :[{}]", "dao.proxy.basePackage" + finalValue);
-                                        return finalValue;
-                                    }
-                                    TypedStringValue classPath = var19.next();
-                                    String value = classPath.getValue();
-                                    String newValue = helper.replacePlaceholders(value, systemProperties);
-                                    resources = pathMatchingResourcePatternResolver.getResources(newValue);
-                                } while (resources.length <= 0);
-
-                                Resource[] var24 = resources;
-                                int var25 = resources.length;
-                                for (int var26 = 0; var26 < var25; ++var26) {
-                                    Resource resource = var24[var26];
+                            if (resources != null && resources.length > 0) {
+                                for (Resource resource : resources) {
+                                    // 支持*通配符
                                     Properties properties = PropertiesLoaderUtils.loadProperties(resource);
+                                    // 只要是BASE_PACKAGE_PROPERTIES结尾的属性，统统去扫描；
                                     Enumeration<?> enumeration = properties.propertyNames();
                                     while (enumeration.hasMoreElements()) {
                                         String propertyKey = (String) enumeration.nextElement();
-                                        if (StringUtils.hasText(propertyKey) && propertyKey.endsWith(basePackage)) {
+                                        if (StringUtils.hasText(propertyKey) && propertyKey.endsWith(BASE_PACKAGE_PROPERTIES)) {
                                             String propertyValue = properties.getProperty(propertyKey);
-                                            if (StringUtils.hasText(propertyValue)) {
-                                                logger.info("get properties: [{}] from [{}]", properties + "=" + propertyValue, resource);
-                                                sb.append(propertyValue).append(",");
-                                            }
+                                            sb.append(propertyValue).append(",");
                                         }
                                     }
+
                                 }
                             }
 
-
                         }
 
-                    } catch (ClassNotFoundException e) {
-                        throw new RuntimeException(e);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+                        if (sb.length() > 0) {
+                            sb.deleteCharAt(sb.length() - 1);
+                        }
+                        String finalValue = sb.toString();
+                        return finalValue;
                     }
+
+
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
             }
-
-//            for (String beanDefinitionName : beanDefinitionNames) {
-//                BeanDefinition beanDefinition = defaultListableBeanFactory.getBeanDefinition(beanDefinitionName);
-//                String beanClassName = beanDefinition.getBeanClassName();
-//                if (beanClassName == null) {
-//                    continue;
-//                }
-//                try {
-//                    Class<?> beanClass = Class.forName(beanClassName, true, this.applicationContext.getClassLoader());
-//                    if (PropertyPlaceholderConfigurer.class.isAssignableFrom(beanClass)) {
-//                        MutablePropertyValues propertyValues = beanDefinition.getPropertyValues();
-//                        PropertyValue locations = propertyValues.getPropertyValue("locations");
-//                        ArrayList<TypedStringValue> valueList = (ArrayList) locations.getValue();
-//                        StringBuilder sb = new StringBuilder();
-//                        for (TypedStringValue classPath : valueList) {
-//                            String value = classPath.getValue();
-//                            String newValue = helper.replacePlaceholders(value, systemProperties);
-//                            Resource[] resources = pathMatchingResourcePatternResolver.getResources(newValue);
-//
-//                            if (resources != null && resources.length > 0) {
-//                                for (Resource resource : resources) {
-//                                    // 支持*通配符
-//                                    Properties properties = PropertiesLoaderUtils.loadProperties(resource);
-//                                    // 只要是BASE_PACKAGE_PROPERTIES结尾的属性，统统去扫描；
-//                                    Enumeration<?> enumeration = properties.propertyNames();
-//                                    while (enumeration.hasMoreElements()) {
-//                                        String propertyKey = (String) enumeration.nextElement();
-//                                        if (StringUtils.hasText(propertyKey) && propertyKey.endsWith(BASE_PACKAGE_PROPERTIES)) {
-//                                            String propertyValue = properties.getProperty(propertyKey);
-//                                            sb.append(propertyValue).append(",");
-//                                        }
-//                                    }
-//
-//                                }
-//                            }
-//
-//                        }
-//
-//                        if (sb.length() > 0) {
-//                            sb.deleteCharAt(sb.length() - 1);
-//                        }
-//                        String finalValue = sb.toString();
-//                        return finalValue;
-//                    }
-//
-//
-//                } catch (ClassNotFoundException e) {
-//                    throw new RuntimeException(e);
-//                } catch (IOException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
         }
         return "";
     }
@@ -287,6 +220,125 @@ public class CacheDaoProxyConfiguration implements BeanDefinitionRegistryPostPro
     private String resolveBasePackage(String basePackage) {
         return ClassUtils.convertClassNameToResourcePath(basePackage);
     }
+
+
+
+
+    private void register1(BeanDefinitionRegistry registry, String packageLocation, boolean isDb) {
+        if (packageLocation != null) {
+            // 分割包路径字符串
+            String[] basePackages = StringUtils.tokenizeToStringArray(packageLocation, ",; \t\n");
+
+            // 遍历每个包路径
+            for (String basePackage : basePackages) {
+                // 扫描包中的类
+                Set<Class<?>> beanClasses = this.scannerPackages(basePackage, isDb);
+                logger.info("Cache Dao or DataSource proxy beanClasses : {}", beanClasses);
+
+                // 遍历扫描到的类并注册Bean定义
+                for (Class<?> beanClass : beanClasses) {
+                    // 配置与当前类相关的DAO方法定义文件
+                    CacheDaoProxyConfig.setDaoMethodDefilesByScanDaoCls(beanClass, isDb);
+
+                    // 创建Bean定义构建器
+                    BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.genericBeanDefinition(beanClass);
+                    GenericBeanDefinition definition = (GenericBeanDefinition) beanDefinitionBuilder.getRawBeanDefinition();
+
+                    // 设置构造参数
+                    definition.getConstructorArgumentValues().addGenericArgumentValue(beanClass);
+
+                    // 设置Bean类为代理工厂类
+                    definition.setBeanClass(CacheDaoProxyFactory.class);
+
+                    // 设置自动装配模式为按类型装配
+                    definition.setAutowireMode(AutowireCapableBeanFactory.AUTOWIRE_BY_TYPE);
+
+                    // 生成标准的Bean名称（首字母小写）
+                    String simpleName = beanClass.getSimpleName();
+                    String beanName = Character.toLowerCase(simpleName.charAt(0)) + simpleName.substring(1);
+
+                    // 记录注册信息到日志
+                    if (isDb) {
+                        logger.info("Cache DataSource proxy class beanName : {}", beanName);
+                    } else {
+                        logger.info("Cache Dao proxy class beanName : {}", beanName);
+                    }
+
+                    // 注册Bean定义到Spring容器
+                    registry.registerBeanDefinition(beanName, definition);
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+    //            String[] var8 = beanDefinitionNames;
+//            int var9 = beanDefinitionNames.length;
+//
+//            for (int var10 = 0; var10 < var9; ++var10) {
+//                String beanName = var8[var10];
+//                BeanDefinition beanDefinition = defaultListableBeanFactory.getBeanDefinition(beanName);
+//                String beanClassName = beanDefinition.getBeanClassName();
+//                if (beanClassName != null && !"".equals(beanClassName)) {
+//                    try {
+//                        Class<?> beanClass = Class.forName(beanClassName, true, this.applicationContext.getClassLoader());
+//                        if (PropertyPlaceholderAutoConfiguration.class.isAssignableFrom(beanClass)) {
+//                            MutablePropertyValues propertyValues = beanDefinition.getPropertyValues();
+//                            PropertyValue locations = propertyValues.getPropertyValue("locations");
+//                            ArrayList<TypedStringValue> valueList = (ArrayList) locations.getValue();
+//                            StringBuilder sb = new StringBuilder();
+//                            Iterator<TypedStringValue> var19 = valueList.iterator();
+//
+//                            while (true) {
+//                                Resource[] resources;
+//                                do {
+//                                    if (!var19.hasNext()) {
+//                                        if (sb.length() > 0) {
+//                                            sb.deleteCharAt(sb.length() - 1);
+//                                        }
+//                                        String finalValue = sb.toString();
+//                                        logger.info("get finalValue properties :[{}]", "dao.proxy.basePackage" + finalValue);
+//                                        return finalValue;
+//                                    }
+//                                    TypedStringValue classPath = var19.next();
+//                                    String value = classPath.getValue();
+//                                    String newValue = helper.replacePlaceholders(value, systemProperties);
+//                                    resources = pathMatchingResourcePatternResolver.getResources(newValue);
+//                                } while (resources.length <= 0);
+//
+//                                Resource[] var24 = resources;
+//                                int var25 = resources.length;
+//                                for (int var26 = 0; var26 < var25; ++var26) {
+//                                    Resource resource = var24[var26];
+//                                    Properties properties = PropertiesLoaderUtils.loadProperties(resource);
+//                                    Enumeration<?> enumeration = properties.propertyNames();
+//                                    while (enumeration.hasMoreElements()) {
+//                                        String propertyKey = (String) enumeration.nextElement();
+//                                        if (StringUtils.hasText(propertyKey) && propertyKey.endsWith(basePackage)) {
+//                                            String propertyValue = properties.getProperty(propertyKey);
+//                                            if (StringUtils.hasText(propertyValue)) {
+//                                                logger.info("get properties: [{}] from [{}]", properties + "=" + propertyValue, resource);
+//                                                sb.append(propertyValue).append(",");
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//                            }
+//
+//
+//                        }
+//
+//                    } catch (ClassNotFoundException e) {
+//                        throw new RuntimeException(e);
+//                    } catch (IOException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                }
+//            }
 
 
 }
