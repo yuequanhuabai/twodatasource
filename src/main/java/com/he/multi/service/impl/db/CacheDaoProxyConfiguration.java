@@ -42,6 +42,16 @@ public class CacheDaoProxyConfiguration implements BeanDefinitionRegistryPostPro
     private ResourcePatternResolver resourcePatternResolver;
 
 
+
+    /**
+     * 扫描指定包路径下的接口类。
+     *
+     * @param basePackage 需要扫描的基础包路径
+     * @param isDb        标识是否为数据库相关的扫描
+     * @return 扫描到的接口类的集合
+     */
+
+
     private Set<Class<?>> scannerPackages(String basePackage, boolean isDb) {
         Set<Class<?>> set = new LinkedHashSet<>();
 
@@ -222,6 +232,43 @@ public class CacheDaoProxyConfiguration implements BeanDefinitionRegistryPostPro
     }
 
 
+    private Set<Class<?>> scannerPackages1(String basePackage, boolean isDb) {
+        Set<Class<?>> classes = new LinkedHashSet<>();
+
+        // 构建资源搜索路径
+        String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX
+                + resolveBasePackage(basePackage) + "/"
+                + DEFAULT_RESOURCE_PATTERN;
+
+        try {
+            // 获取匹配的资源文件
+            Resource[] resources = this.resourcePatternResolver.getResources(packageSearchPath);
+
+            for (Resource resource : resources) {
+                if (resource.isReadable()) {
+                    MetadataReader metadataReader = this.metadataReaderFactory.getMetadataReader(resource);
+                    String className = metadataReader.getClassMetadata().getClassName();
+                    String proxyName = isDb ? "DataSource" : "Dao";
+                    logger.info("Cache " + proxyName + "Proxy className: {}", className);
+                    try {
+                        // 加载类
+                        Class<?> clazz = Class.forName(className, true, this.applicationContext.getClassLoader());
+                        if (clazz.isInterface()) {
+                            logger.info("Cache " + proxyName + "Proxy Scan class: {}", clazz.getName());
+                            classes.add(clazz);
+                        }
+                    } catch (ClassNotFoundException e) {
+                        // 记录类加载异常
+                        logger.error("Cache " + proxyName + "Proxy exception", e);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            logger.error("Error reading resources for package: " + basePackage, e);
+        }
+
+        return classes;
+    }
 
 
     private void register1(BeanDefinitionRegistry registry, String packageLocation, boolean isDb) {

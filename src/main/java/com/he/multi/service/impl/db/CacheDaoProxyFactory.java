@@ -1,11 +1,10 @@
 package com.he.multi.service.impl.db;
 
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.FactoryBean;
 
 import java.lang.reflect.Proxy;
 
-public class CacheDaoProxyFactory implements FactoryBean {
+public class CacheDaoProxyFactory<T> implements FactoryBean {
 
     private Class<T> daoInterface;
 
@@ -21,7 +20,7 @@ public class CacheDaoProxyFactory implements FactoryBean {
 
     @Override
     public Class<?> getObjectType() {
-        return null;
+        return daoInterface;
     }
 
     @Override
