@@ -7,10 +7,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Test1 {
     private static Logger logger = LoggerFactory.getLogger(Test1.class);
@@ -80,5 +77,11 @@ public class Test1 {
         list2.add(map);
 
 
+    }
+
+    @Test
+    public void test4(){
+        String string = UUID.randomUUID().toString();
+        System.out.println(string);
     }
 }
