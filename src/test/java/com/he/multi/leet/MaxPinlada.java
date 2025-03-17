@@ -68,14 +68,18 @@ public class MaxPinlada {
     @Test
     public void test2() {
         String s = "adsda";
+
+        String substring = s.substring(5, 6);
+        System.out.println("substring:" + substring);
+
 //        boolean bo = palindromeNumber(s);
 
 
 //        Set<String> palindromicSubstrings1 = findPalindromicSubstrings1(s);
 //        System.out.println("palindromicSubstrings1: " + palindromicSubstrings1);
 
-        List<String> palindromicSubstrings = findPalindromicSubstrings(s);
-        System.out.println("palindromicSubstrings: " + palindromicSubstrings);
+//        List<String> palindromicSubstrings = findPalindromicSubstrings(s);
+//        System.out.println("palindromicSubstrings: " + palindromicSubstrings);
 
     }
 
@@ -147,4 +151,51 @@ public class MaxPinlada {
             right++;
         }
     }
+
+
+
+
+    @Test
+    public void test3(){
+
+        System.out.println("hello");
+        String s = "sdfds";
+
+       List<String > list = getPindromeNumber(s);
+
+        System.out.println("list:" + list);
+    }
+
+    private List<String> getPindromeNumber(String s) {
+        List<String> result = new ArrayList<>();
+        if(s == null || s.length() == 0){
+            return result;
+        }
+
+        for (int i = 0; i < s.length(); i++) {
+            getOddNumber(s,i,i,result);
+            getEvenNumber(s,i,i+1,result);
+        }
+
+        return result;
+    }
+
+    private void getEvenNumber(String s, int left, int right, List<String> result) {
+        while (left >=0 && right < s.length()&& s.charAt(left)==s.charAt(right)){
+            result.add(s.substring(left, right + 1));
+            left--;
+            right++;
+        }
+    }
+
+    private void getOddNumber(String s, int left, int right, List<String> result) {
+
+        while (left >=0 && right < s.length()&& s.charAt(left)==s.charAt(right)){
+            result.add(s.substring(left, right + 1));
+            left--;
+            right++;
+        }
+    }
+
+
 }
