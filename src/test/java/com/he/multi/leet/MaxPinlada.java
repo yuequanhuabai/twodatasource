@@ -105,6 +105,7 @@ public class MaxPinlada {
         return result;
     }
 
+
     // 从中心开始向两边扩展，寻找回文子串
     private static void expandAroundCenter(String s, int left, int right, List<String> result) {
         while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
