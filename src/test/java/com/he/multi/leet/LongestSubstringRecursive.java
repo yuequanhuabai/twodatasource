@@ -73,6 +73,28 @@ public class LongestSubstringRecursive {
 
 
 
+    public static int lengthOfLongestSubstringDP(String s) {
+        int n = s.length();
+        if (n == 0) return 0;
 
+        int[] dp = new int[n]; // dp[i] 表示以 s[i] 结尾的最长无重复子串长度
+        dp[0] = 1; // 第一个字符的子串长度为 1
+        HashMap<Character, Integer> lastIndex = new HashMap<>();
+        lastIndex.put(s.charAt(0), 0);
+        int maxLen = 1;
+
+        for (int i = 1; i < n; i++) {
+            char c = s.charAt(i);
+            if (!lastIndex.containsKey(c) || i - lastIndex.get(c) > dp[i - 1]) {
+                dp[i] = dp[i - 1] + 1;
+            } else {
+                dp[i] = i - lastIndex.get(c);
+            }
+            lastIndex.put(c, i);
+            maxLen = Math.max(maxLen, dp[i]);
+        }
+
+        return maxLen;
+    }
 
 }
