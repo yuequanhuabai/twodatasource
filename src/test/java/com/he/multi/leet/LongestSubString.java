@@ -149,4 +149,53 @@ public class LongestSubString {
         }
         return maxLength;
     }
+
+
+    @Test
+    public void test3() {
+        String s = "asdfsdf";
+        int maxsubstring = maxsubstring(s);
+        System.out.println("maxsubstring = " + maxsubstring);
+//        System.out.println("asdfasdf");
+    }
+
+    /**
+     * 思路，從子第一個字符開始遍歷，記住每個字符及以它為起點的最大不重複字串的長度為臨時最長的字串長度tempLength
+     * 當和下一個字符進行比較的時候，較大的賦值給全局變量的最大字符長度maxLength
+     * 直至依次遍歷完整個字符串
+     *
+     * (記住每個字符及以它為起點的最大不重複字串的長度為臨時最長的字串長度tempLength)
+     * 這裏有問題：無論是某個字符開始的子字符串裏面會出現其它字符的重複造成整個子字符串的重複，所以要確定一個字符串是非重複的就要確定他的子字符串是非重複的；
+     * 這是一個遞歸的邏輯；核心就是判斷該字符產和去掉最後一個字符后的子字符串時候為非重複子字符串；
+     * 核心就是判斷一個子字符串裏是否有重複的字符，原字符串的最大不重複子字符串的長度和子字符串的最大不重複字串和後面追加的一個字符是否為子字符串
+     * 裏面的字符相關；大問題分解爲了小問題和後綴字符關係的問題；小問題又可以分解為它的子字符串和最後一個字符的關係；形成遞歸邏輯；
+     *
+     */
+
+    public static int maxsubstring(String inputString) {
+        int length = inputString.length();
+
+        if (length == 0) return 0;
+        if (length == 1) return 1;
+
+//        Map<Character,Integer> map = new HashMap<>();
+//        Map<Character, Integer> map2 = new HashMap<>();
+
+        int maxLength = 1;
+        for (int i = 0; i < length; i++) {
+            int currentLength = 1;
+            char c = inputString.charAt(i);
+//            map2.put(c, i);
+            for (int j = i + 1; j < length; j++) {
+                char c1 = inputString.charAt(j);
+                if (c == c1) {
+                    break;
+                }
+                currentLength++;
+            }
+            maxLength = Math.max(currentLength, maxLength);
+        }
+
+        return maxLength;
+    }
 }
