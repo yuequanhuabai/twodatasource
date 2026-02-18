@@ -18,7 +18,7 @@ public class CacheDaoProxyConfig implements InitializingBean    {
     private static final Logger logger= LoggerFactory.getLogger(CacheDaoProxyConfig.class);
 
 
-          private static final Map<String,String> cacheDaoMap=  new ConcurrentHashMap<String,String>();
+    private static final Map<String,String> cacheDaoMap=  new ConcurrentHashMap<String,String>();
 
     private static final Map<String,String> cacheDataSourceMap=  new ConcurrentHashMap<String,String>();
 
