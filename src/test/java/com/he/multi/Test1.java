@@ -35,9 +35,7 @@ public class Test1 {
 //        logger.info("format: "+format);
 
         // 青山之塚
-        // 月全 话白
 
-        // 青山之云
         // 我不再是我，好像被自己迂回了。 你不再是风，风
 
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
