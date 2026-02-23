@@ -1,7 +1,5 @@
 package com.he.multi.multi.simple;
 
-import static sun.misc.PostVMInitHook.run;
-
 public class TestSimple {
     public static  volatile int a = 0;
 
