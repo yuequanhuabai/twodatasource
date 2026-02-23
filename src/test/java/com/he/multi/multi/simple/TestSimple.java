@@ -1,6 +1,5 @@
 package com.he.multi.multi.simple;
 
-import static sun.misc.PostVMInitHook.run;
 
 public class TestSimple {
     public static  volatile int a = 0;
@@ -20,6 +19,7 @@ public class TestSimple {
             );
             threads[i].start();
         }
+        // 主线程一次加入到thread[i]中去; 直道最后一个thread[9]执行完毕;
         for (int i = 0; i < 10; i++) {
             threads[i].join();
         }
