@@ -1,8 +1,11 @@
 package com.he.multi.multi.simple;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class TestSimple {
     public static volatile int a = 0;
+    private static final Lock lock = new ReentrantLock();
 
 
     // 题目: 启动10个线程，每个线程执行一千次自增操作,最终的结果是10000;
@@ -64,7 +67,12 @@ public class TestSimple {
             threads[i] = new Thread(
                     () -> {
                         for (int j = 0; j < 1000; j++) {
-                            a++;
+                            lock.lock();
+                            try {
+                                a++;
+                            } finally {
+                                lock.unlock();
+                            }
                         }
                     }
             );
