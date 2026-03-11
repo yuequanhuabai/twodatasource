@@ -13,6 +13,7 @@ public class TestSimple2 {
             threads[i] = new Thread(
                     () -> {
                         for (int j = 0; j < 1000; j++) {
+                            // 鎖的使用？ 公共的鎖
                             synchronized (Object.class) {
                                 a++;
                             }

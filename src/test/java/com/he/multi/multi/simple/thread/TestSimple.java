@@ -4,7 +4,10 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class TestSimple {
-    public static volatile int a = 0;
+
+    public static  int a = 0;
+    // 是否需要volatile修飾;
+//    public static volatile int a = 0;
     private static final Lock lock = new ReentrantLock();
 
     // 题目: 启动10个线程，每个线程执行一千次自增操作,最终的结果是10000;
