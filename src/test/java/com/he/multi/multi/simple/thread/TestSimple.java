@@ -5,10 +5,22 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class TestSimple {
 
-    public static  int a = 0;
-    // 是否需要volatile修飾;
-//    public static volatile int a = 0;
+    public static int a = 0;
     private static final Lock lock = new ReentrantLock();
+
+    static class IncrementTask implements Runnable {
+        @Override
+        public void run() {
+            for (int j = 0; j < 1000; j++) {
+                lock.lock();
+                try {
+                    a++;
+                } finally {
+                    lock.unlock();
+                }
+            }
+        }
+    }
 
     // 题目: 启动10个线程，每个线程执行一千次自增操作,最终的结果是10000;
     public static void main(String[] args) throws InterruptedException {
@@ -16,18 +28,7 @@ public class TestSimple {
         Thread[] threads = new Thread[10];
 
         for (int i = 0; i < 10; i++) {
-            threads[i] = new Thread(
-                    () -> {
-                        for (int j = 0; j < 1000; j++) {
-                            lock.lock();
-                            try {
-                                a++;
-                            } finally {
-                                lock.unlock();
-                            }
-                        }
-                    }
-            );
+            threads[i] = new Thread(new IncrementTask());
             threads[i].start();
         }
         // 主线程一次加入到thread[i]中去; 直道最后一个thread[9]执行完毕;
@@ -37,6 +38,4 @@ public class TestSimple {
 
         System.out.println("a:" + a);
     }
-
-
 }
