@@ -10,20 +10,23 @@ public class Test1 {
     // 需要的原材料：10个线程
     private static final Thread[] threads = new Thread[10];
     //    操作的共享变量
-    static int a = 0;
+    static int[] a = {0};
     //  共享资源控制锁
     private static final Object lock = new Object();
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
-        for(int i=0;i<threads.length;i++){
-            threads[i]=new Thread(new Task1(lock,a));
+        for (int i = 0; i < threads.length; i++) {
+            threads[i] = new Thread(new Task1(lock, a));
+            threads[i].start();
         }
 
-        for(int i=0;i<threads.length;i++){
-
+        for (int i = 0; i < threads.length; i++) {
+            threads[i].join();
         }
+
+        System.out.println("sum：" + a[0]);
 
     }
 }

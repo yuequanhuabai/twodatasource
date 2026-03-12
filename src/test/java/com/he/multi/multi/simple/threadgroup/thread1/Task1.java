@@ -6,19 +6,21 @@ package com.he.multi.multi.simple.threadgroup.thread1;
  */
 public class Task1 implements Runnable {
     private Object o;
-    private int i;
+    private int a[];
+    private final int count = 1000;
 
-    public Task1(Object o, int i) {
+    public Task1(Object o, int[] a) {
         this.o = o;
-        this.i = i;
+        this.a = a;
     }
 
 
     @Override
     public void run() {
         synchronized (o) {
-            i++;
+            for (int j = 0; j < count; j++) {
+                a[0]++;
+            }
         }
-
     }
 }
