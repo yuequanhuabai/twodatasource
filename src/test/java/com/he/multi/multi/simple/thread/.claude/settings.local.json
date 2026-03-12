@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//d/software/developmentTools/Git/gitee/newpap/temp/twodatasource/**)",
+      "Bash(echo \"exit: $?\")"
+    ]
+  }
+}
