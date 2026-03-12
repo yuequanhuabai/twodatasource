@@ -17,8 +17,9 @@ public class Task1 implements Runnable {
 
     @Override
     public void run() {
-        synchronized (o) {
-            for (int j = 0; j < count; j++) {
+
+        for (int j = 0; j < count; j++) {
+            synchronized (o) {
                 a[0]++;
             }
         }
