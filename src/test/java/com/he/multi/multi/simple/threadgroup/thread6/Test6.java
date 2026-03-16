@@ -7,7 +7,7 @@ public class Test6 {
 
         Counter counter = new Counter();
 
-        int times = 10;
+        final int times = 1000;
 
 
         for (int i = 0; i < 10; i++) {
@@ -20,6 +20,8 @@ public class Test6 {
         for (int i = 0; i < 10; i++) {
             threads[i].join();
         }
+
+        System.out.println("count:" + counter.getCount());
     }
 
 }

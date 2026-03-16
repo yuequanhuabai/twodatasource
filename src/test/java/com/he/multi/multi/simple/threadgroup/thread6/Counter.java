@@ -6,10 +6,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Counter {
     private int count = 0;
 
-    private Lock lock = new ReentrantLock();
-
-
-
+    private final Lock lock = new ReentrantLock();
 
 
     public int increment() {
