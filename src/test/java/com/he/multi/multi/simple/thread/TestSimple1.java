@@ -1,7 +1,10 @@
 package com.he.multi.multi.simple.thread;
 
+import sun.misc.Contended;
+
 public class TestSimple1 {
 
+    @Contended
     public static volatile int a = 0;
 
     private static final Object lock = new Object();

@@ -26,7 +26,7 @@ public class Test1 {
             threads[i].join();
         }
 
-        System.out.println("sum：" + a[0]);
+        System.out.println("sum:" + a[0]);
 
     }
 }
