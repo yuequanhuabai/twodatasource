@@ -1,34 +1,31 @@
-package com.he.multi.multi.simple.threadgroup.thread7;
+package com.he.multi.multi.simple.threadgroup.add.thread6;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class Calcutor {
+public class Counter {
+    private int count = 0;
 
     private final Lock lock = new ReentrantLock();
 
 
-    private int a = 0;
-
-
     public int increment() {
-
         lock.lock();
         try {
-            return a++;
+            return count++;
         } finally {
             lock.unlock();
         }
     }
 
-
-    public int getA() {
+    public int getCount() {
         lock.lock();
         try {
-            return a;
+            return count;
         } finally {
             lock.unlock();
         }
     }
+
 
 }

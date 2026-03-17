@@ -1,4 +1,4 @@
-package com.he.multi.multi.simple.threadgroup.thread8;
+package com.he.multi.multi.simple.threadgroup.add.thread8;
 
 public class Task8 implements Runnable {
     private Calcutor8 calcutor8;

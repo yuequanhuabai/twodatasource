@@ -1,4 +1,4 @@
-package com.he.multi.multi.simple.threadgroup.thread3;
+package com.he.multi.multi.simple.threadgroup.add.thread3;
 
 /**
  *  错误示例：锁非共享;

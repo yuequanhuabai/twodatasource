@@ -1,19 +1,15 @@
-package com.he.multi.multi.simple.threadgroup.thread6;
+package com.he.multi.multi.simple.threadgroup.add.thread4;
 
-public class Test6 {
+public class Test4 {
+
+    static int[] a = {0};
+    private static final Object lock = new Object();
 
     public static void main(String[] args) throws InterruptedException {
         Thread[] threads = new Thread[10];
-
-        Counter counter = new Counter();
-
-        final int times = 1000;
-
-
         for (int i = 0; i < 10; i++) {
-            threads[i] = new Thread(new Task6(counter, times));
+            threads[i] = new Task4(a, lock);
         }
-
         for (int i = 0; i < 10; i++) {
             threads[i].start();
         }
@@ -21,7 +17,7 @@ public class Test6 {
             threads[i].join();
         }
 
-        System.out.println("count:" + counter.getCount());
-    }
+        System.out.println("a[0]=" + a[0]);
 
+    }
 }

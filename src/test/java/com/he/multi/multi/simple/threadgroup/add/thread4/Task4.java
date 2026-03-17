@@ -1,4 +1,4 @@
-package com.he.multi.multi.simple.threadgroup.thread4;
+package com.he.multi.multi.simple.threadgroup.add.thread4;
 
 public class Task4 extends Thread {
 

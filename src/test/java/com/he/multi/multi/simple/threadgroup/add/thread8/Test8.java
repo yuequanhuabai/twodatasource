@@ -1,4 +1,4 @@
-package com.he.multi.multi.simple.threadgroup.thread8;
+package com.he.multi.multi.simple.threadgroup.add.thread8;
 
 import java.lang.reflect.Field;
 import java.util.concurrent.atomic.LongAdder;

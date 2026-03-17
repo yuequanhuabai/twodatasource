@@ -1,4 +1,4 @@
-package com.he.multi.multi.simple.threadgroup.thread1;
+package com.he.multi.multi.simple.threadgroup.add.thread1;
 
 /**
  * 题目: 启动10个线程，每个线程执行一千次自增操作,最终的结果是10000;

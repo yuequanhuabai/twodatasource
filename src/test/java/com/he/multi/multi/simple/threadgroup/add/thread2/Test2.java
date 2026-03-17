@@ -1,4 +1,4 @@
-package com.he.multi.multi.simple.threadgroup.thread2;
+package com.he.multi.multi.simple.threadgroup.add.thread2;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

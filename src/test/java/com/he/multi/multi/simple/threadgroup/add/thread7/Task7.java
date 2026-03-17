@@ -1,4 +1,4 @@
-package com.he.multi.multi.simple.threadgroup.thread7;
+package com.he.multi.multi.simple.threadgroup.add.thread7;
 
 public class Task7 implements Runnable {
     int times;

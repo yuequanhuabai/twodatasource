@@ -1,4 +1,4 @@
-package com.he.multi.multi.simple.threadgroup.thread6;
+package com.he.multi.multi.simple.threadgroup.add.thread6;
 
 public class Task6 implements Runnable {
 

@@ -1,4 +1,4 @@
-package com.he.multi.multi.simple.threadgroup.thread1;
+package com.he.multi.multi.simple.threadgroup.add.thread1;
 
 /**
  * 线程执行体，核心是规定线程执行逻辑;

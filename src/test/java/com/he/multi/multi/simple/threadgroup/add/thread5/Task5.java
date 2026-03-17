@@ -1,4 +1,4 @@
-package com.he.multi.multi.simple.threadgroup.thread5;
+package com.he.multi.multi.simple.threadgroup.add.thread5;
 
 import java.util.concurrent.locks.Lock;
 
