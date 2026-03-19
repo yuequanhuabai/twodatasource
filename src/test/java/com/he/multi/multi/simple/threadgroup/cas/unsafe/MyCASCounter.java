@@ -4,7 +4,7 @@ import sun.misc.Unsafe;
 
 import java.lang.reflect.Field;
 
-// 需要使用jdk8環境去運行代碼
+// 锟斤拷要使锟斤拷jdk8锟絟锟斤拷去锟絓锟叫达拷锟絘
 public class MyCASCounter {
     private volatile int value;
 
@@ -14,12 +14,12 @@ public class MyCASCounter {
 
     static {
         try {
-            // Unsafe 構造函數是私有的，只能通過反射拿到
+            // Unsafe 锟斤拷锟届函锟斤拷锟斤拷私锟叫的ｏ拷只锟斤拷通锟絕锟斤拷锟斤拷锟矫碉拷
             Field f = Unsafe.class.getDeclaredField("theUnsafe");
             f.setAccessible(true);
             UNSAFE = (Unsafe) f.get(null);
 
-            // 拿到 value字段在對象中的內存偏移量
+            // 锟矫碉拷 value锟街讹拷锟节岋拷锟斤拷锟叫的內达拷偏锟斤拷锟斤拷
             VALUE_OFFSET = UNSAFE.objectFieldOffset(MyCASCounter.class.getDeclaredField("value"));
 
         } catch (Exception e) {
@@ -28,11 +28,25 @@ public class MyCASCounter {
     }
 
     public int incrementAndGet() {
+        return incrementAndGet(false);
+    }
+
+    public int incrementAndGet(boolean debug) {
         for (; ; ) {
             int old = value;
             int next = old + 1;
             if (UNSAFE.compareAndSwapInt(this, VALUE_OFFSET, old, next)) {
+                if (debug) {
+                    System.out.println(Thread.currentThread().getName()
+                            + " | 蹇収old=" + old + ", 瑷堢畻next=" + next + " | CAS鎴愬姛, 瀵叆" + next);
+                }
                 return next;
+            } else {
+                if (debug) {
+                    System.out.println(Thread.currentThread().getName()
+                            + " | 蹇収old=" + old + ", 瑷堢畻next=" + next
+                            + " | CAS澶辨晽! 鍏у瓨宸茶鏀圭偤" + value + ", 鏈瑷堢畻浣滃虎, 閲嶈│");
+                }
             }
         }
     }
