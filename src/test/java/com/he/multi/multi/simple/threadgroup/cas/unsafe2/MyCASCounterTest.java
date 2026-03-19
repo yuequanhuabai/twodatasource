@@ -1,16 +1,17 @@
-package com.he.multi.multi.simple.threadgroup.cas.unsafe;
+package com.he.multi.multi.simple.threadgroup.cas.unsafe2;
 
 // ��Ҫʹ��jdk8�h��ȥ�\�д��a
 public class MyCASCounterTest {
 
     public static void main(String[] args) throws InterruptedException {
         MyCASCounter counter = new MyCASCounter();
-        Thread[] threads = new Thread[10];
+        // 用2個線程、每個跑5次，方便觀察；改回10/1000可跑完整測試
+        Thread[] threads = new Thread[2];
 
         for (int i = 0; i < threads.length; i++) {
             threads[i] = new Thread(() -> {
                 for (int j = 0; j < 1000; j++) {
-                    counter.incrementAndGet();
+                    counter.incrementAndGet(true);  // debug=true 打印每一步
                 }
 
             });

@@ -1,4 +1,4 @@
-package com.he.multi.multi.simple.threadgroup.cas.unsafe;
+package com.he.multi.multi.simple.threadgroup.cas.unsafe2;
 
 import sun.misc.Unsafe;
 
@@ -28,11 +28,25 @@ public class MyCASCounter {
     }
 
     public int incrementAndGet() {
+        return incrementAndGet(false);
+    }
+
+    public int incrementAndGet(boolean debug) {
         for (; ; ) {
             int old = value;
             int next = old + 1;
             if (UNSAFE.compareAndSwapInt(this, VALUE_OFFSET, old, next)) {
+                if (debug) {
+                    System.out.println(Thread.currentThread().getName()
+                            + " | 快照old=" + old + ", 計算next=" + next + " | CAS成功, 寫入" + next);
+                }
                 return next;
+            } else {
+                if (debug) {
+                    System.out.println(Thread.currentThread().getName()
+                            + " | 快照old=" + old + ", 計算next=" + next
+                            + " | CAS失敗! 內存已被改為" + value + ", 本次計算作廢, 重試");
+                }
             }
         }
     }
