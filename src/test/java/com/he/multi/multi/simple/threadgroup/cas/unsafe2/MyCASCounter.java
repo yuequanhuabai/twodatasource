@@ -4,7 +4,7 @@ import sun.misc.Unsafe;
 
 import java.lang.reflect.Field;
 
-// ��Ҫʹ��jdk8�h��ȥ�\�д��a
+// 需要使用 JDK8 去运行
 public class MyCASCounter {
     private volatile int value;
 
