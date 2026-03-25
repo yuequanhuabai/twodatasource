@@ -15,7 +15,7 @@ import java.util.concurrent.locks.LockSupport;
  *   2. 可以精确唤醒某个线程（unpark 指定目标）
  *   3. unpark 可以先于 park 调用（有"许可"机制，不会丢失唤醒）
  */
-public class Test8 {
+public class LockSupportDemo {
 
     public static void main(String[] args) throws InterruptedException {
 

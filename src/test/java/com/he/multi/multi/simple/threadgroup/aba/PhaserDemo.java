@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * 3个线程注册到同一个 Phaser，通过 arriveAndAwaitAdvance() 逐阶段推进。
  */
-public class Test5 {
+public class PhaserDemo {
 
     public static void main(String[] args) throws InterruptedException {
 

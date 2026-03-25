@@ -14,7 +14,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *   - step=2: A 执行
  * 每个线程在 while 循环中检查 step，不是自己的回合就 await()。
  */
-public class Test7 {
+public class ReentrantLockConditionDemo {
 
     private static final ReentrantLock lock = new ReentrantLock();
     private static final Condition condition = lock.newCondition();

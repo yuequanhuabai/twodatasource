@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 原理：CompletableFuture 支持链式异步编排，thenRun() 保证前一个阶段完成后才执行下一个。
  * 这是最简洁的写法，天然表达了 B → C → A 的顺序。
  */
-public class Test9 {
+public class CompletableFutureDemo {
 
     public static void main(String[] args) {
 

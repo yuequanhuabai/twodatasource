@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * 注意：这种方式本质上把并发变成了串行，仅用于演示，实际生产中不推荐。
  */
-public class Test4 {
+public class ThreadJoinDemo {
 
     public static void main(String[] args) throws InterruptedException {
 
