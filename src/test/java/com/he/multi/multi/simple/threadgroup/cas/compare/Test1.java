@@ -1,6 +1,7 @@
 package com.he.multi.multi.simple.threadgroup.cas.compare;
 
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.LongAdder;
 
 /**
  * **LongAdder vs AtomicLong 性能对比**
@@ -17,13 +18,19 @@ public class Test1 {
 
 
     public static void main(String[] args) throws InterruptedException {
-        long start = System.nanoTime();
-        // AtomicLong
-        testAtomicLong();
-        // LongAdder
-        long end = System.nanoTime();
-        System.out.println("cost: "+(end-start)/1000000);
+//        // AtomicLong
+//        long start1 = System.nanoTime();
+//        testAtomicLong();
+//        long end1 = System.nanoTime();
+//        System.out.println("AtomicLong cost: " + (end1 - start1) / 1_000_000 + " ms");
+//
+//        System.out.println("---------------------------");
 
+        // LongAdder
+        long start2 = System.nanoTime();
+        testLongAdder();
+        long end2 = System.nanoTime();
+        System.out.println("LongAdder  cost: " + (end2 - start2) / 1_000_000 + " ms");
     }
 
     public static void testAtomicLong() throws InterruptedException {
@@ -46,6 +53,51 @@ public class Test1 {
 
         }
 
-        System.out.println("atomicLong:" + atomicLong.get());
+        System.out.println("AtomicLong result: " + atomicLong.get());
     }
+
+
+    public static void testLongAdder() throws InterruptedException {
+        Thread[] threads = new Thread[100];
+        LongAdder longAdder = new LongAdder();
+
+        for (int i = 0; i < threads.length; i++) {
+            threads[i] = new Thread(() ->
+            {
+                for (int j = 0; j < 1000000; j++) {
+                    longAdder.increment();
+                }
+            }
+            );
+            threads[i].start();
+        }
+
+        for (int i = 0; i < threads.length; i++) {
+            threads[i].join();
+        }
+
+        System.out.println("sum:" + longAdder.sum());
+    }
+
+//    public static void testLongAdder() throws InterruptedException {
+//        Thread[] threads = new Thread[100];
+//        LongAdder longAdder = new LongAdder();
+//
+//        for (int i = 0; i < threads.length; i++) {
+//            threads[i] = new Thread(
+//                    () -> {
+//                        for (int j = 0; j < 1000000; j++) {
+//                            longAdder.increment();
+//                        }
+//                    }
+//            );
+//            threads[i].start();
+//        }
+//
+//        for (int i = 0; i < threads.length; i++) {
+//            threads[i].join();
+//        }
+//
+//        System.out.println("LongAdder  result: " + longAdder.sum());
+//    }
 }
