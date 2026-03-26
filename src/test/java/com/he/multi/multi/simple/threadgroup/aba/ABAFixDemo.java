@@ -49,7 +49,7 @@ public class ABAFixDemo {
                     + ", stamp:" + balance.getStamp());
 
             if (!success) {
-                System.out.println("ThreadA: CAS 失败！检测到值在中间被修改过（ABA 被识别）");
+                System.out.println("ThreadA: CAS failed! 检测到值在中间被修改过（ABA 被识别）");
             }
         });
 
