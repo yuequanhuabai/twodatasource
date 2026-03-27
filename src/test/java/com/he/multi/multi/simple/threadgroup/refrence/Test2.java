@@ -1,4 +1,4 @@
-package com.he.multi.multi.simple.threadgroup.aba;
+package com.he.multi.multi.simple.threadgroup.refrence;
 
 public class Test2 {
     public static void main(String[] args) {
