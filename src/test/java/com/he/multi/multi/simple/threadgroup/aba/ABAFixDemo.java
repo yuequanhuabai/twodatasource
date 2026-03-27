@@ -96,7 +96,7 @@ public class ABAFixDemo {
                 e.printStackTrace();
             }
             boolean success = balance.compareAndSet(100, 50, expectedStamp, expectedStamp + 1);
-            System.out.println("ThreadA execute CAS operate: " + (success?"success":"failed") + ", current balance is: " + balance.getReference());
+            System.out.println("ThreadA execute CAS operate: " + (success?"success":"failed") + ", current balance is: " + balance.getReference()+"current stamp: "+balance.getStamp());
 
         });
 
@@ -110,7 +110,7 @@ public class ABAFixDemo {
         Thread threadC = new Thread(() -> {
             int[] stampHolder = new int[1];
             Integer value = balance.get(stampHolder);
-            balance.compareAndSet(100, 50, stampHolder[0], stampHolder[0] + 1);
+            balance.compareAndSet(50, 100, stampHolder[0], stampHolder[0] + 1);
             System.out.println("ThreadC change balance to 100");
         });
 
