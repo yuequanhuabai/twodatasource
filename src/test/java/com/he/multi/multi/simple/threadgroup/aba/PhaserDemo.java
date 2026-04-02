@@ -54,4 +54,27 @@ public class PhaserDemo {
         threadB.join();
         threadC.join();
     }
+
+
+
+//
+//    Phaser phaser = new Phaser(100); // 100个线程
+//
+//    // 100个线程跑的是同一段代码,
+    // 每100个线程做完，开始下一个工作
+//  for (int i = 0; i < 100; i++) {
+//        new Thread(() -> {
+//
+//            doPhase1Work();                    // 每个人做自己那份活
+//            phaser.arriveAndAwaitAdvance();    // 等所有人做完第1阶段
+//
+//            doPhase2Work();
+//            phaser.arriveAndAwaitAdvance();    // 等所有人做完第2阶段
+//
+//            doPhase3Work();
+//            phaser.arriveAndDeregister();      // 结束，退出
+//
+//        }).start();
+//    }
+
 }
