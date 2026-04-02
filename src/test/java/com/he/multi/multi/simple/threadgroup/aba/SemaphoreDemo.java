@@ -58,4 +58,18 @@ public class SemaphoreDemo {
         threadB.join();
         threadC.join();
     }
+
+//    Semaphore sem = new Semaphore(5); // 最多5个线程同时执行
+//
+//    // 100个线程都跑这段代码
+//    void handleRequest() {
+//        sem.acquire();   // 拿到许可才能进，最多5个同时进
+//        try {
+//            callDatabase(); // 同一时刻最多5个线程在访问数据库
+//        } finally {
+//            sem.release(); // 用完归还，下一个人可以进
+//        }
+//    }
+
+
 }

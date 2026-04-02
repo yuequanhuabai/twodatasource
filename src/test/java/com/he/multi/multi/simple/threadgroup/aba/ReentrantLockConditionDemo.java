@@ -82,4 +82,38 @@ public class ReentrantLockConditionDemo {
         threadB.join();
         threadC.join();
     }
+
+//    它不是用来做"排队轮流执行"的，而是用来做精细化的条件等待。
+//
+//    典型场景：生产者-消费者（有界缓冲区）
+//
+//    ReentrantLock lock = new ReentrantLock();
+//    Condition notFull  = lock.newCondition(); // 队列没满，生产者可以放
+//    Condition notEmpty = lock.newCondition(); // 队列没空，消费者可以取
+//
+//    // 生产者
+//  lock.lock();
+//  try {
+//        while (queue.size() == MAX) {
+//            notFull.await();        // 满了，等消费者取走
+//        }
+//        queue.add(item);
+//        notEmpty.signal();          // 放了一个，通知消费者来取
+//    } finally {
+//        lock.unlock();
+//    }
+//
+//    // 消费者
+//  lock.lock();
+//  try {
+//        while (queue.isEmpty()) {
+//            notEmpty.await();       // 空了，等生产者放入
+//        }
+//        item = queue.poll();
+//        notFull.signal();           // 取了一个，通知生产者可以放
+//    } finally {
+//        lock.unlock();
+//    }
+
+
 }
